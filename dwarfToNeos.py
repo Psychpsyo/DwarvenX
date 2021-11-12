@@ -1,3 +1,8 @@
+#This file opens a websocket running on port 8037 and, whenever Dwarf Fortress sends something to the console,
+#it formats and forwards it for Neos. Neos should then look at the first character of every message it receives.
+#If it's a B, the rest of the message should get printed to the background layer, if F, it should go to the foreground
+#layer. (What's currently there is overwritten)
+
 import subprocess
 import websockets
 import asyncio
@@ -140,12 +145,12 @@ async def neosConnection(socket, path):
 			dorf.stdin.write(bytes(message, "utf-8"))
 			dorf.stdin.flush()
 		
-		#currently doesn't get reached.
+		#currently never gets reached.
 		mainLock.release()
 	else:
 		print("Client declined.")
 
-#start websocket and listen
+#start websocket and listen on port 8037
 print("Starting websocket...")
 start_server = websockets.serve(neosConnection, "localhost", 8037)
 
